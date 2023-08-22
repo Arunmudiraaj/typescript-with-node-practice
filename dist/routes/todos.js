@@ -7,20 +7,22 @@ router.get("/", (req, res, next) => {
     res.status(200).json({ todos: todos });
 });
 router.post("/todo", (req, res) => {
+    const body = req.body;
     const newTodo = {
         id: new Date().toISOString(),
-        desc: req.body.description,
+        desc: body.description,
     };
     todos.push(newTodo);
     res.status(201).json({ message: "todo added", todos: todos });
 });
 router.put("/todo/:id", (req, res) => {
-    const id = req.params.id;
-    const index = todos.findIndex((item) => item.id === id);
+    const params = req.params;
+    const body = req.body;
+    const index = todos.findIndex((item) => item.id === params.id);
     if (index >= 0) {
         const newData = {
-            id: id,
-            desc: req.body.description,
+            id: params.id,
+            desc: body.description,
         };
         todos[index] = newData;
         return res.status(200).json({ message: "data updated", todos });
@@ -28,8 +30,8 @@ router.put("/todo/:id", (req, res) => {
     res.status(404).json({ message: "No such data found" });
 });
 router.delete("/todo/:id", (req, res) => {
-    const id = req.params.id;
-    todos = todos.filter((item) => item.id !== id);
+    const params = req.params;
+    todos = todos.filter((item) => item.id !== params.id);
     res.status(300).json({ message: "todo got deleted", todos });
 });
 exports.default = router;
